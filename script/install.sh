@@ -42,7 +42,7 @@ if [ $oc_present -ge 1 ]; then
 echo -e "\e[92m #--> \e[1mOpen Collector\e[25m is present\e[39m"
 else
 echo -e "\e[38;5;160m #--> \e[1mOpen Collector\e[25m is NOT present!\e[39m"
-echo -e "\e[92m #--> Please install it first, and make sure you are running this from the same folder as where \e[1mlrctl\e[25m is.\e[39m"
+echo -e "\e[92m #--> Please install, configure and get running it first.\e[39m"
 echo -e "\e[92m #--> Exiting now.\e[39m"
 for i in {16..21} {21..16} ; do echo -en "\e[38;5;${i}m------\e[0m" ; done ; echo
 for i in {52,88,124,160} ; do echo -en "\e[38;5;${i}m#\e[0m" ; done
