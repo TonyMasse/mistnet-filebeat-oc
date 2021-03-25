@@ -37,7 +37,6 @@ else
 oc_present=0
 fi
 
-# Output the result
 if [ $oc_present -ge 1 ]; then
 echo -e "\e[92m #--> \e[1mOpen Collector\e[25m is present\e[39m"
 else
@@ -54,24 +53,48 @@ fi
 echo -e "\e[92m #--> Downloading Pipeline\e[39m"
 curl -L -O https://raw.githubusercontent.com/TonyMasse/mistnet-filebeat-oc/main/config/mistnet-via-FileBeat-Syslog.pipe
 
-# echo -e "\e[92m #--> Importing Pipeline\e[39m"
-# cat mistnet-via-FileBeat-Syslog.pipe | ./lrctl oc pipe import
+echo -e "\e[92m #--> Importing Pipeline\e[39m"
+cat mistnet-via-FileBeat-Syslog.pipe | ./lrctl oc pipe import
 
-# echo -e "\e[92m #--> List Pipelines\e[39m"
-# ./lrctl oc -- pipe status
+echo -e "\e[92m #--> List Pipelines\e[39m"
+./lrctl oc -- pipe status
 
-# for i in {22,28,34,40} ; do echo -en "\e[38;5;${i}m#\e[0m" ; done
-# echo -e "\e[92m# Install, configure and start \e[1mFile Beat\e[25m\e[39m"
+for i in {22,28,34,40} ; do echo -en "\e[38;5;${i}m#\e[0m" ; done
+echo -e "\e[92m# Install, configure and start \e[1mFile Beat\e[25m\e[39m"
 
-# cd /tmp
-# curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.10.2-x86_64.rpm
-# sudo -E rpm -vi filebeat-7.10.2-x86_64.rpm
-# rm /tmp/filebeat-7.10.2-x86_64.rpm
-# cd
+echo -e "\e[92m #--> Downloading \e[1mFile Beat\e[25m...\e[39m"
+cd /tmp
+curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.12.0-x86_64.rpm -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.12.0-x86_64.rpm.sha512
 
-# sudo -E cp --force /etc/filebeat/filebeat.yml /etc/filebeat/filebeat.yml.bck
-# sudo -E curl -sL https://raw.githubusercontent.com/TonyMasse/mistnet-filebeat-oc/main/config/filebeat-syslog.yml -o /etc/filebeat/filebeat.yml
-# sudo -E service filebeat start
+echo -e "\e[92m #--> Checking \e[1mFile Beat\e[25m checksum...\e[39m"
+checksum_ok=$(sha512sum -c filebeat-7.12.0-x86_64.rpm.sha512 | grep -c -i ": OK" 2>/dev/null) || checksum_ok=-1
+
+if [ $checksum_ok -ge 1 ]; then
+echo -e "\e[92m #--> Checksum for \e[1mFile Beat\e[25m is valid\e[39m"
+else
+echo -e "\e[38;5;160m #--> Checksum for \e[1mFile Beat\e[25m is NOT valid!\e[39m"
+echo -e "\e[92m #--> Exiting now.\e[39m"
+for i in {16..21} {21..16} ; do echo -en "\e[38;5;${i}m------\e[0m" ; done ; echo
+for i in {52,88,124,160} ; do echo -en "\e[38;5;${i}m#\e[0m" ; done
+echo -e "\e[38;5;160m### Install script ### Failed\e[39m"
+echo " "
+exit 1
+fi
+
+echo -e "\e[92m #--> Installing \e[1mFile Beat\e[25m...\e[39m"
+sudo -E rpm -vi filebeat-7.12.0-x86_64.rpm
+echo -e "\e[92m #--> Cleaning up install files...\e[39m"
+rm /tmp/filebeat-7.12.0-x86_64.rpm /tmp/filebeat-7.12.0-x86_64.rpm.sha512
+cd
+
+echo -e "\e[92m #--> Backing up \e[1mFile Beat\e[25m configuration files...\e[39m"
+sudo -E cp --force /etc/filebeat/filebeat.yml /etc/filebeat/filebeat.yml.bck
+
+echo -e "\e[92m #--> Downloading \e[1mFile Beat\e[25m custom configuration file...\e[39m"
+sudo -E curl -sL https://raw.githubusercontent.com/TonyMasse/mistnet-filebeat-oc/main/config/filebeat-syslog.yml -o /etc/filebeat/filebeat.yml
+
+echo -e "\e[92m #--> Starting \e[1mFile Beat\e[25m service...\e[39m"
+sudo -E service filebeat start
 
 for i in {16..21} {21..16} ; do echo -en "\e[38;5;${i}m------\e[0m" ; done ; echo
 for i in {22,28,34,40} ; do echo -en "\e[38;5;${i}m#\e[0m" ; done
