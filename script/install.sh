@@ -10,7 +10,7 @@ for i in {16..21} {21..16} ; do echo -en "\e[38;5;${i}m------\e[0m" ; done ; ech
 for i in {22,28,34,40} ; do echo -en "\e[38;5;${i}m#\e[0m" ; done
 echo -e "\e[92m# Check presense of \e[1mlrctl\e[25m and \e[1mOpen Collector\e[25m, check Status and import Pipeline\e[39m"
 
-echo -e "\e[92m #--> Check \e[1mlrctl\e[25m presence...\e[39m"
+echo -e "\e[92m #--> Checking \e[1mlrctl\e[25m presence...\e[39m"
 # First establish if "lrctl" is present and running
 lrctl_present=1
 ./lrctl --help >/dev/null 2>/dev/null || lrctl_present=-1
@@ -18,15 +18,17 @@ lrctl_present=1
 if [ $lrctl_present -ge 1 ]; then
 echo -e "\e[92m #--> \e[1mlrctl\e[25m is present\e[39m"
 else
-echo -e "\e[92m #--> \e[1mlrctl\e[25m is NOT present!\e[39m"
+echo -e "\e[38;5;160m #--> \e[1mlrctl\e[25m is NOT present!\e[39m"
 echo -e "\e[92m #--> Please install it first, and make sure you are running this from the same folder as where \e[1mlrctl\e[25m is.\e[39m"
 echo -e "\e[92m #--> Exiting now.\e[39m"
-for i in {22,28,34,40} ; do echo -en "\e[38;5;${i}m#\e[0m" ; done
-echo -e "\e[92m### Install script ### Failed\e[39m"
+for i in {16..21} {21..16} ; do echo -en "\e[38;5;${i}m------\e[0m" ; done ; echo
+for i in {52,88,124,160} ; do echo -en "\e[38;5;${i}m#\e[0m" ; done
+echo -e "\e[38;5;160m### Install script ### Failed\e[39m"
+echo " "
 exit 1
 fi
 
-echo -e "\e[92m #--> Check \e[1mOpen Collector\e[25m presence...\e[39m"
+echo -e "\e[92m #--> Checking \e[1mOpen Collector\e[25m presence...\e[39m"
 if [ $lrctl_present -eq 1 ]; then
 # "lrctl"is present. Now check if the OC is installed too.
 oc_present=$(./lrctl status | grep -c -i open_collector 2>/dev/null) || oc_present=-1
@@ -39,11 +41,13 @@ fi
 if [ $oc_present -ge 1 ]; then
 echo -e "\e[92m #--> \e[1mOpen Collector\e[25m is present\e[39m"
 else
-echo -e "\e[92m #--> \e[1mOpen Collector\e[25m is NOT present!\e[39m"
+echo -e "\e[38;5;160m #--> \e[1mOpen Collector\e[25m is NOT present!\e[39m"
 echo -e "\e[92m #--> Please install it first, and make sure you are running this from the same folder as where \e[1mlrctl\e[25m is.\e[39m"
 echo -e "\e[92m #--> Exiting now.\e[39m"
-for i in {22,28,34,40} ; do echo -en "\e[38;5;${i}m#\e[0m" ; done
-echo -e "\e[92m### Install script ### Failed\e[39m"
+for i in {16..21} {21..16} ; do echo -en "\e[38;5;${i}m------\e[0m" ; done ; echo
+for i in {52,88,124,160} ; do echo -en "\e[38;5;${i}m#\e[0m" ; done
+echo -e "\e[38;5;160m### Install script ### Failed\e[39m"
+echo " "
 exit 1
 fi
 
@@ -69,5 +73,6 @@ curl -L -O https://raw.githubusercontent.com/TonyMasse/mistnet-filebeat-oc/main/
 # sudo -E curl -sL https://raw.githubusercontent.com/TonyMasse/mistnet-filebeat-oc/main/config/filebeat-syslog.yml -o /etc/filebeat/filebeat.yml
 # sudo -E service filebeat start
 
+for i in {16..21} {21..16} ; do echo -en "\e[38;5;${i}m------\e[0m" ; done ; echo
 for i in {22,28,34,40} ; do echo -en "\e[38;5;${i}m#\e[0m" ; done
 echo -e "\e[92m### Install script ### Done\e[39m"
